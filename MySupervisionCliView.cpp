@@ -83,6 +83,9 @@ BOOL CMySupervisionCliView::PreCreateWindow(CREATESTRUCT& cs)
 		p = theApp.bezier_curve(theApp.points1, t);
 		theApp.pArr[i].x = (LONG)p.x;
 		theApp.pArr[i].y = (LONG)p.y;
+
+		theApp.pArrNAV[i].x = (LONG)p.x;
+		theApp.pArrNAV[i].y = (LONG)((p.z - 1) * 10000);
 	}
 
 	m_x_pos = (ptSize - 15) > 0 ? -(ptSize - 15) * 80 : 0; //2024-5-22,最新净值位置
@@ -131,15 +134,18 @@ qwertyuiop asdfghjkl zxcvbnm `1234567890-=[]\\;\',./";
 	TextOut(hDC, 8, 8, str, (int)wcslen(str));
 #else //MBCS
 	LineTo(hDC, 8 + (int)strlen(str) / 2 * 18, 8 + h_font + 43); //分割线
+	
 	TextOut(hDC, 8, 8, str3, (int)strlen(str3));
+
+	TextOut(hDC, 132, 32, "* - 当日涨幅    = - 单位净值", (int)strlen("* - 当日涨幅    = - 单位净值"));
 
 	HPEN hpenh;
 	hpenh = CreatePen(PS_DOT, 1, RGB(212, 85, 26));
 	DeleteObject(SelectObject(hDC, hpenh));
 	CRect rect;
 	GetClientRect(rect);
-	MoveToEx(hDC, 0, DRAW_LINE_BASE + 298, NULL); //0线
-	LineTo(hDC, rect.Width(), DRAW_LINE_BASE + 298);
+	MoveToEx(hDC, 0, DRAW_LINE_BASE + 208, NULL); //0线
+	LineTo(hDC, rect.Width(), DRAW_LINE_BASE + 208);
 	
 	if (hpenh != NULL) DeleteObject(hpenh);
 
@@ -213,8 +219,14 @@ qwertyuiop asdfghjkl zxcvbnm `1234567890-=[]\\;\',./";
 	//SelectObject(hDC, hFontOriginal);
 	//DeleteObject(hFont2);
 	int j;
-	for (j = 0; j < theApp.ptNum; j++) { //Bezier点阵
+	for (j = 0; j < theApp.ptNum; j++) { //Bezier点阵 DRAW_LINE_BASE
 		TextOut(hDC, (int)(theApp.pArr[j].x * m_x_scale) + 2 + m_x_pos, theApp.pArr[j].y, _T("*"), 1);
+		SetTextColor(hDC, RGB(255, 165, 0));
+		TextOut(hDC, (int)(theApp.pArrNAV[j].x * m_x_scale) + 2 + m_x_pos, 
+			DRAW_LINE_BASE + 298 - theApp.pArrNAV[j].y * m_y_scale * 1.77f, _T("="), 1);
+		TextOut(hDC, (int)(theApp.pArrNAV[j].x * m_x_scale) + 2 + m_x_pos,
+			DRAW_LINE_BASE + 298 - theApp.pArrNAV[j].y * m_y_scale * 1.77f + 1, _T("="), 1);
+		SetTextColor(hDC, 0x000000);
 	}
 
 	//百分比和时间文本角度倾斜

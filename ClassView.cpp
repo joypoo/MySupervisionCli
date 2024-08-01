@@ -157,6 +157,14 @@ void CClassView::FillClassView()
 	m_wndClassView.InsertItem(_T("段永平教学楼-1（西区统一站）【西向东】"), 3, 3, hClass);
 	m_wndClassView.InsertItem(_T("……"), 6, 6, hClass);
 
+	HTREEITEM hRoot2 = m_wndClassView.InsertItem(_T("后勤"), 0, 1);
+	hClass = m_wndClassView.InsertItem(_T("超市"), 1, 1, hRoot2);
+	hClass = m_wndClassView.InsertItem(_T("食堂"), 1, 1, hRoot2);
+	hClass = m_wndClassView.InsertItem(_T("宿舍"), 1, 1, hRoot2);
+	hClass = m_wndClassView.InsertItem(_T("通信"), 1, 1, hRoot2);
+	hClass = m_wndClassView.InsertItem(_T("物业"), 1, 1, hRoot2);
+	hClass = m_wndClassView.InsertItem(_T("小学"), 1, 1, hRoot2);
+	hClass = m_wndClassView.InsertItem(_T("幼儿园"), 1, 1, hRoot2);
 	m_wndClassView.Expand(hRoot, TVE_EXPAND);
 }
 
