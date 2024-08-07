@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "ColorStatic.h"
+
 //定义全局变量
 
 //定义结构体
@@ -61,6 +63,8 @@ protected:
 	CButton m_btn_zoomout;
 	CButton m_btn_panleft;
 	CButton m_btn_panright;
+	CColorStatic m_btn_panup;
+	CColorStatic m_btn_pandown;
 
 	CProgressCtrl m_progress_showpoint; //展示的点的个数
 	CSliderCtrl m_slider_showpoint; //修改展示点数滑块
@@ -68,6 +72,7 @@ protected:
 	float m_x_scale = 1.0; //x轴比例
 	float m_y_scale = 1.0; //y轴比例
 	int m_x_pos = 0; //x轴滚动偏移量
+	int m_y_pos = 0; //y轴滚动偏移量
 	// 生成的消息映射函数
 protected:
 	afx_msg void OnFilePrintPreview();
@@ -83,6 +88,8 @@ public:
 	afx_msg void OnBnClickedPanleft();
 	afx_msg void OnBnClickedPanright();
 	afx_msg void OnBnClickedZoomall();
+	afx_msg void OnBnClickedPanUp();
+	afx_msg void OnBnClickedPanDown();
 };
 
 #ifndef _DEBUG  // MySupervisionCliView.cpp 中的调试版本

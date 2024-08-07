@@ -94,9 +94,11 @@
 #define IDC_BTN_ZOOMALL                 1015
 #define IDC_BTN_PANLEFT                 1016
 #define IDC_BTN_PANRIGHT                1017
-#define IDC_LIST1                       1018
-#define IDC_LIST2                       1019
-#define IDC_BTN_UPDATE                  1020
+#define IDC_BTN_PANUP                   1018
+#define IDC_BTN_PANDOWN                 1019
+#define IDC_LIST1                       1020
+#define IDC_LIST2                       1021
+#define IDC_BTN_UPDATE                  1022
 
 // Next default values for new objects
 // 

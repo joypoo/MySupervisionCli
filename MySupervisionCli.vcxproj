@@ -185,6 +185,7 @@
   <ItemGroup>
     <ClInclude Include="..\..\Projects\Mine\others\STM32F103_TFT\HARDWARE\LCD\pic.h" />
     <ClInclude Include="ClassView.h" />
+    <ClInclude Include="ColorStatic.h" />
     <ClInclude Include="FileView.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="MainFrm.h" />
@@ -200,6 +201,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ClassView.cpp" />
+    <ClCompile Include="ColorStatic.cpp" />
     <ClCompile Include="FileView.cpp" />
     <ClCompile Include="MainFrm.cpp" />
     <ClCompile Include="MySupervisionCli.cpp" />

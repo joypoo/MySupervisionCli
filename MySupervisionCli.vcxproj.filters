@@ -57,6 +57,9 @@
     <ClInclude Include="..\..\Projects\Mine\others\STM32F103_TFT\HARDWARE\LCD\pic.h">
       <Filter>源文件</Filter>
     </ClInclude>
+    <ClInclude Include="ColorStatic.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MySupervisionCli.cpp">
@@ -87,6 +90,9 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="pch.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorStatic.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

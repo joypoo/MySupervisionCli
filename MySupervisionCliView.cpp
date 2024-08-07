@@ -39,6 +39,9 @@ BEGIN_MESSAGE_MAP(CMySupervisionCliView, CView)
 	ON_BN_CLICKED(IDC_BTN_PANLEFT, &CMySupervisionCliView::OnBnClickedPanleft)
 	ON_BN_CLICKED(IDC_BTN_PANRIGHT, &CMySupervisionCliView::OnBnClickedPanright)
 	ON_BN_CLICKED(IDC_BTN_ZOOMALL, &CMySupervisionCliView::OnBnClickedZoomall)
+	//ON_STN_CLICKED(IDC_BTN_PANUP, &CMySupervisionCliView::OnBnClickedPanUp)
+	ON_BN_CLICKED(IDC_BTN_PANUP, &CMySupervisionCliView::OnBnClickedPanUp)
+	ON_BN_CLICKED(IDC_BTN_PANDOWN, &CMySupervisionCliView::OnBnClickedPanDown)
 END_MESSAGE_MAP()
 
 // CMySupervisionCliView 构造/析构
@@ -125,15 +128,14 @@ qwertyuiop asdfghjkl zxcvbnm `1234567890-=[]\\;\',./";
 	char* str3 = "https://www.dayfund.cn/ajs/ajaxdata.shtml?showtype=getfundvalue&fundcode=100032&t=";
 #endif
 	int w_font = 32, h_font = 16;
-	
-	//pen.DeleteObject();
-	MoveToEx(hDC, 8, 8 + h_font + 43, NULL);
+
+	//MoveToEx(hDC, 8, 8 + h_font + 43, NULL);
 	
 #ifdef _UNICODE
 	LineTo(hDC, 8 + (int)wcslen(str) * 18, 8 + h_font + 43); //分割线
 	TextOut(hDC, 8, 8, str, (int)wcslen(str));
 #else //MBCS
-	LineTo(hDC, 8 + (int)strlen(str) / 2 * 18, 8 + h_font + 43); //分割线
+	//LineTo(hDC, 8 + (int)strlen(str) / 2 * 18, 8 + h_font + 43); //分割线
 	
 	TextOut(hDC, 8, 8, str3, (int)strlen(str3));
 
@@ -144,8 +146,8 @@ qwertyuiop asdfghjkl zxcvbnm `1234567890-=[]\\;\',./";
 	DeleteObject(SelectObject(hDC, hpenh));
 	CRect rect;
 	GetClientRect(rect);
-	MoveToEx(hDC, 0, DRAW_LINE_BASE + 208, NULL); //0线
-	LineTo(hDC, rect.Width(), DRAW_LINE_BASE + 208);
+	MoveToEx(hDC, 8, DRAW_LINE_BASE + 208 + m_y_pos, NULL); //0线
+	LineTo(hDC, rect.Width() - 8, DRAW_LINE_BASE + 208 + m_y_pos);
 	
 	if (hpenh != NULL) DeleteObject(hpenh);
 
@@ -220,12 +222,12 @@ qwertyuiop asdfghjkl zxcvbnm `1234567890-=[]\\;\',./";
 	//DeleteObject(hFont2);
 	int j;
 	for (j = 0; j < theApp.ptNum; j++) { //Bezier点阵 DRAW_LINE_BASE
-		TextOut(hDC, (int)(theApp.pArr[j].x * m_x_scale) + 2 + m_x_pos, theApp.pArr[j].y, _T("*"), 1);
+		TextOut(hDC, (int)(theApp.pArr[j].x * m_x_scale) + 2 + m_x_pos, theApp.pArr[j].y + m_y_pos, _T("*"), 1);
 		SetTextColor(hDC, RGB(255, 165, 0));
 		TextOut(hDC, (int)(theApp.pArrNAV[j].x * m_x_scale) + 2 + m_x_pos, 
-			DRAW_LINE_BASE + 298 - theApp.pArrNAV[j].y * m_y_scale * 1.77f, _T("="), 1);
+			DRAW_LINE_BASE + 298 - (int)(theApp.pArrNAV[j].y * m_y_scale * 1.77f) + m_y_pos, _T("="), 1);
 		TextOut(hDC, (int)(theApp.pArrNAV[j].x * m_x_scale) + 2 + m_x_pos,
-			DRAW_LINE_BASE + 298 - theApp.pArrNAV[j].y * m_y_scale * 1.77f + 1, _T("="), 1);
+			DRAW_LINE_BASE + 298 - (int)(theApp.pArrNAV[j].y * m_y_scale * 1.77f + 1) + m_y_pos, _T("="), 1);
 		SetTextColor(hDC, 0x000000);
 	}
 
@@ -248,17 +250,17 @@ qwertyuiop asdfghjkl zxcvbnm `1234567890-=[]\\;\',./";
 		//成交时间点标记
 		SetTextColor(hDC, 0x0000FF);
 #ifdef _UNICODE
-		TextOut(hDC, (int)theApp.points1[j].x * m_x_scale - 4 + m_x_pos, DRAW_DATE_BASE, _T("·"), 1);
+		TextOut(hDC, (int)theApp.points1[j].x * m_x_scale - 4 + m_x_pos, DRAW_DATE_BASE + m_y_pos, _T("·"), 1);
 #else //MBCS
-		TextOut(hDC, (int)(theApp.points1[j].x * m_x_scale) - 4 + m_x_pos, DRAW_DATE_BASE, _T("·"), 2);
+		TextOut(hDC, (int)(theApp.points1[j].x * m_x_scale) - 4 + m_x_pos, DRAW_DATE_BASE + m_y_pos, _T("·"), 2);
 #endif
 		//成交日期
 		SetTextColor(hDC, 0xD30080);
 		if (resultDate != 0) { 
 #ifdef _UNICODE
-			TextOut(hDC, (int)theApp.points1[j].x * m_x_scale + 11 + m_x_pos, DRAW_DATE_BASE, resultDate, (int)convertedDate - 1);
+			TextOut(hDC, (int)theApp.points1[j].x * m_x_scale + 11 + m_x_pos, DRAW_DATE_BASE + m_y_pos, resultDate, (int)convertedDate - 1);
 #else //MBCS
-			TextOut(hDC, (int)(theApp.points1[j].x * m_x_scale) + 11 + m_x_pos, DRAW_DATE_BASE, theApp.points1[j].strDate.c_str(), (int)strlen(theApp.points1[j].strDate.c_str()));
+			TextOut(hDC, (int)(theApp.points1[j].x * m_x_scale) + 11 + m_x_pos, DRAW_DATE_BASE + m_y_pos, theApp.points1[j].strDate.c_str(), (int)strlen(theApp.points1[j].strDate.c_str()));
 #endif
 		}
 		//成交涨幅百分比
@@ -280,9 +282,9 @@ qwertyuiop asdfghjkl zxcvbnm `1234567890-=[]\\;\',./";
 				SetTextColor(hDC, 0x000000FF);
 			}
 #ifdef _UNICODE
-			TextOut(hDC, (int)theApp.points1[j].x * m_x_scale + 2 + m_x_pos, DRAW_DATE_BASE - 16, resultData, (int)convertedData - 1);
+			TextOut(hDC, (int)theApp.points1[j].x * m_x_scale + 2 + m_x_pos, DRAW_DATE_BASE - 16 + m_y_pos, resultData, (int)convertedData - 1);
 #else //_MBCS
-			TextOut(hDC, (int)(theApp.points1[j].x * m_x_scale) + 2 + m_x_pos, DRAW_DATE_BASE - 16, chData, (int)strlen(chData));
+			TextOut(hDC, (int)(theApp.points1[j].x * m_x_scale) + 2 + m_x_pos, DRAW_DATE_BASE - 16 + m_y_pos, chData, (int)strlen(chData));
 #endif
 			// Free multibyte character buffer
 			if (pMBBuffer)
@@ -300,14 +302,14 @@ qwertyuiop asdfghjkl zxcvbnm `1234567890-=[]\\;\',./";
 	for (j = 0; j < theApp.ptSize; j++) {
 		hpen = CreatePen(PS_DASH, 1, RGB(rand() % 256, rand() % 256, rand() % 256));
 		DeleteObject(SelectObject(hDC, hpen));
-		MoveToEx(hDC, (int)(theApp.points1[j].x * m_x_scale) + 4 + m_x_pos, DRAW_DATE_BASE - 8, (LPPOINT)NULL);
-		LineTo(hDC, (int)(theApp.points1[j].x * m_x_scale) + 4 + m_x_pos, (int)theApp.points1[j].y + 15);
+		MoveToEx(hDC, (int)(theApp.points1[j].x * m_x_scale) + 4 + m_x_pos, DRAW_DATE_BASE - 8 + m_y_pos, (LPPOINT)NULL);
+		LineTo(hDC, (int)(theApp.points1[j].x * m_x_scale) + 4 + m_x_pos, (int)theApp.points1[j].y + 15 + m_y_pos);
 		//Pie(hDC, (int)theApp.points1[j].x - 3, (int)theApp.points1[j].y + 15 - 4, (int)theApp.points1[j].x + 8 + 3, (int)theApp.points1[j].y + 25, \
 		//	(int)theApp.points1[j].x + 8 + 3, (int)theApp.points1[j].y + 15 - 2, (int)theApp.points1[j].x - 3, (int)theApp.points1[j].y + 15 - 2);
 		
 		hpen = CreatePen(PS_INSIDEFRAME, 2, RGB(0xFF, 0x0, 0x0));
 		DeleteObject(SelectObject(hDC, hpen));
-		theApp.Marker(hDC, (LONG)(theApp.points1[j].x * m_x_scale) + 4 + m_x_pos, (LONG)theApp.points1[j].y);
+		theApp.Marker(hDC, (LONG)(theApp.points1[j].x * m_x_scale) + 4 + m_x_pos, (LONG)theApp.points1[j].y + m_y_pos);
 		//TextOut(hDC, theApp.points1[j].x, theApp.points1[j].y, _T("X"), 1);
 	}
 
@@ -452,18 +454,41 @@ int CMySupervisionCliView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;
 	}
 	if (!m_btn_panleft.Create(_T("<<"), WS_CHILD | WS_VISIBLE | BS_FLAT, //» ←
-			CRect(BTN_POS_X - 0, 42, BTN_POS_X - 0 + 35, 68), this, (UINT)IDC_BTN_PANLEFT))
+			CRect(BTN_POS_X + 99, 42, BTN_POS_X + 35 + 99, 68), this, (UINT)IDC_BTN_PANLEFT))
 	{
 		TRACE0("Failed to create button PanLeft\n");
 		return -1;
 	}
 	
 	if (!m_btn_panright.Create(_T(">>"), WS_CHILD | WS_VISIBLE | BS_FLAT, //→
-		CRect(BTN_POS_X + 50 + 35 + 15, 42, BTN_POS_X + 50 + 35 + 15 + 35, 68), this, (UINT)IDC_BTN_PANRIGHT))
+		CRect(BTN_POS_X + 50 + 35 + 15 + 36, 42, BTN_POS_X + 50 + 35 + 15 + 35 + 36, 68), this, (UINT)IDC_BTN_PANRIGHT))
 	{
 		TRACE0("Failed to create button PanRight\n");
 		return -1;
 	}
+
+	if (!m_btn_panup.Create(_T(""), WS_CHILD | WS_VISIBLE | BS_FLAT, //⬆️
+		CRect(BTN_POS_X + 120 - 2, 16, BTN_POS_X + 35 + 120 - 2, 40), this, (UINT)IDC_BTN_PANUP))
+	{
+		TRACE0("Failed to Create Button PanUp\n");
+		return -1;
+	}
+	m_btn_panup.SetText("^");
+	m_btn_panup.ModifyStyle(0, SS_CENTERIMAGE | BS_CENTER | BS_OWNERDRAW);
+	m_btn_panup.SetTextColor(RGB(0, 0, 255));
+	m_btn_panup.SetBkColor(RGB(255, 140, 0));// (255, 165, 0));
+
+	if (!m_btn_pandown.Create(_T("_"), WS_CHILD | WS_VISIBLE | BS_FLAT | BS_CENTER, //⬇️
+		CRect(BTN_POS_X + 120 - 2, 70, BTN_POS_X + 35 + 120 - 2, 94), 
+			this, (UINT)IDC_BTN_PANDOWN))
+	{
+		TRACE0("Failed to Create Button PanDown\n");
+		return -1;
+	}
+	m_btn_pandown.ModifyStyle(0, SS_CENTERIMAGE | SS_CENTER | BS_OWNERDRAW);
+	m_btn_pandown.SetBkColor(RGB(255, 69, 0));
+	//m_btn_pandown.SetImage("C:\\Users\\Owner\\Documents\\prjVC\\MySupervisionCli\\res\\explorer.bmp");
+
 	/*
 	if (!m_progress_showpoint.Create(WS_CHILD | WS_VISIBLE | BS_FLAT,
 		CRect(BTN_POS_X + 50 + 35 + 15 + 50, 40, BTN_POS_X + 50 + 35 + 15 + 35 + 150, 70), this, 
@@ -531,6 +556,17 @@ void CMySupervisionCliView::OnBnClickedZoomall()
 	Invalidate();
 }
 
+void CMySupervisionCliView::OnBnClickedPanUp()
+{
+	m_y_pos += 40;
+	Invalidate();
+}
+
+void CMySupervisionCliView::OnBnClickedPanDown()
+{
+	m_y_pos -= 40;
+	Invalidate();
+}
 
 //画线
 void CMySupervisionCliView::DrawLine(HDC hDC, int x1, int y1, int x2, int y2)
